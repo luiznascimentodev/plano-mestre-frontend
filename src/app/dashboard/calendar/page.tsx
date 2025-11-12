@@ -400,16 +400,18 @@ export default function CalendarPage() {
     let minHour = 24;
     let maxHour = 0;
 
-    allSessions.forEach((session) => {
-      const sessionDate = new Date(
-        session.scheduledAt || (session as any).completedAt
-      );
-      const hour = sessionDate.getHours();
-      const endHour = hour + Math.ceil((session.duration || 0) / 60);
-
-      if (hour < minHour) minHour = hour;
-      if (endHour > maxHour) maxHour = endHour;
-    });
+   
+allSessions.forEach((session) => {
+  // Type guard para verificar qual tipo de sessão
+  const sessionDate = new Date(
+    'scheduledAt' in session
+      ? session.scheduledAt
+      : (session as any).completedAt || (session as any).startedAt
+  );
+  const hour = sessionDate.getHours();
+  const endHour = hour + Math.ceil((session.duration || 0) / 60);
+  // ...
+});
 
     // Adicionar margem de 2 horas antes e depois
     minHour = Math.max(0, minHour - 2);
