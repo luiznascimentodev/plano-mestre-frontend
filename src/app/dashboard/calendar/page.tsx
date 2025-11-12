@@ -403,14 +403,20 @@ export default function CalendarPage() {
    
 allSessions.forEach((session) => {
   // Type guard para verificar qual tipo de sessão
+  const isScheduledSession = (s: StudySession | ScheduledSession): s is ScheduledSession => {
+    return 'scheduledAt' in s;
+  };
+  
   const sessionDate = new Date(
-    'scheduledAt' in session
+    isScheduledSession(session)
       ? session.scheduledAt
-      : (session as any).completedAt || (session as any).startedAt
+      : session.completedAt
   );
   const hour = sessionDate.getHours();
   const endHour = hour + Math.ceil((session.duration || 0) / 60);
-  // ...
+  
+  if (hour < minHour) minHour = hour;
+  if (endHour > maxHour) maxHour = endHour;
 });
 
     // Adicionar margem de 2 horas antes e depois
@@ -1028,7 +1034,7 @@ allSessions.forEach((session) => {
               </h2>
               <button
                 onClick={resetForm}
-                className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-400"
+                className="text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-300"
               >
                 <XMarkIcon className="w-6 h-6" />
               </button>
