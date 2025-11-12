@@ -51,12 +51,18 @@ export default function CalendarPage() {
     today.setHours(12, 0, 0, 0); // Normalizar para meio-dia
     return today;
   });
-  const [scheduledSessions, setScheduledSessions] = useState<ScheduledSession[]>([]);
-  const [completedSessions, setCompletedSessions] = useState<StudySession[]>([]);
+  const [scheduledSessions, setScheduledSessions] = useState<
+    ScheduledSession[]
+  >([]);
+  const [completedSessions, setCompletedSessions] = useState<StudySession[]>(
+    []
+  );
   const [topics, setTopics] = useState<Topic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
-  const [editingSession, setEditingSession] = useState<ScheduledSession | null>(null);
+  const [editingSession, setEditingSession] = useState<ScheduledSession | null>(
+    null
+  );
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const [scheduleForm, setScheduleForm] = useState({
@@ -121,13 +127,18 @@ export default function CalendarPage() {
       const startDateStr = range.start.toISOString().split("T")[0];
       const endDateStr = range.end.toISOString().split("T")[0];
 
-      const scheduledUrl = `/scheduled-sessions?startDate=${encodeURIComponent(startDateStr)}&endDate=${encodeURIComponent(endDateStr)}&includeCompleted=true`;
+      const scheduledUrl = `/scheduled-sessions?startDate=${encodeURIComponent(
+        startDateStr
+      )}&endDate=${encodeURIComponent(endDateStr)}&includeCompleted=true`;
 
       const [topicsRes, scheduledRes, completedRes] = await Promise.all([
         apiPrivate.get("/topics"),
         apiPrivate.get(scheduledUrl).catch((err) => {
           // Se falhar com 404, tentar sem os parâmetros de período
-          console.warn("Erro ao buscar por período, tentando sem filtros:", err);
+          console.warn(
+            "Erro ao buscar por período, tentando sem filtros:",
+            err
+          );
           return apiPrivate.get("/scheduled-sessions?includeCompleted=true");
         }),
         apiPrivate.get("/study-sessions"),
@@ -136,7 +147,9 @@ export default function CalendarPage() {
       setTopics(topicsRes.data);
 
       // Garantir que scheduledRes.data seja um array
-      const scheduledData = Array.isArray(scheduledRes.data) ? scheduledRes.data : [];
+      const scheduledData = Array.isArray(scheduledRes.data)
+        ? scheduledRes.data
+        : [];
 
       // Se não veio filtrado, filtrar no frontend
       const filteredScheduled = scheduledData.filter((s: ScheduledSession) => {
@@ -158,7 +171,9 @@ export default function CalendarPage() {
       setScheduledSessions([]);
       setCompletedSessions([]);
       if (err.response?.status === 404) {
-        console.warn("Endpoint não encontrado. Verifique se o backend foi reiniciado.");
+        console.warn(
+          "Endpoint não encontrado. Verifique se o backend foi reiniciado."
+        );
       }
     } finally {
       setIsLoading(false);
@@ -177,7 +192,9 @@ export default function CalendarPage() {
     if (!scheduleForm.topicId || !scheduleForm.scheduledAt) return;
 
     try {
-      const scheduledDateTime = new Date(scheduleForm.scheduledAt).toISOString();
+      const scheduledDateTime = new Date(
+        scheduleForm.scheduledAt
+      ).toISOString();
 
       if (editingSession) {
         await apiPrivate.patch(`/scheduled-sessions/${editingSession.id}`, {
@@ -196,7 +213,10 @@ export default function CalendarPage() {
 
         // Track session scheduling
         if (response.data?.id) {
-          analytics.trackSessionScheduled(response.data.id, parseInt(scheduleForm.topicId));
+          analytics.trackSessionScheduled(
+            response.data.id,
+            parseInt(scheduleForm.topicId)
+          );
         }
       }
 
@@ -211,7 +231,9 @@ export default function CalendarPage() {
   const handleEdit = (session: ScheduledSession) => {
     setEditingSession(session);
     const date = new Date(session.scheduledAt);
-    const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    const localDateTime = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    )
       .toISOString()
       .slice(0, 16);
 
@@ -308,7 +330,11 @@ export default function CalendarPage() {
   const getMonthDays = () => {
     const { start } = getMonthRange(currentDate);
     const firstDay = new Date(start);
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const lastDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
 
     // Ajustar para começar na segunda-feira
     const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
@@ -400,24 +426,23 @@ export default function CalendarPage() {
     let minHour = 24;
     let maxHour = 0;
 
-   
-allSessions.forEach((session) => {
-  // Type guard para verificar qual tipo de sessão
-  const isScheduledSession = (s: StudySession | ScheduledSession): s is ScheduledSession => {
-    return 'scheduledAt' in s;
-  };
-  
-  const sessionDate = new Date(
-    isScheduledSession(session)
-      ? session.scheduledAt
-      : session.completedAt
-  );
-  const hour = sessionDate.getHours();
-  const endHour = hour + Math.ceil((session.duration || 0) / 60);
-  
-  if (hour < minHour) minHour = hour;
-  if (endHour > maxHour) maxHour = endHour;
-});
+    allSessions.forEach((session) => {
+      // Type guard para verificar qual tipo de sessão
+      const isScheduledSession = (
+        s: StudySession | ScheduledSession
+      ): s is ScheduledSession => {
+        return "scheduledAt" in s;
+      };
+
+      const sessionDate = new Date(
+        isScheduledSession(session) ? session.scheduledAt : session.completedAt
+      );
+      const hour = sessionDate.getHours();
+      const endHour = hour + Math.ceil((session.duration || 0) / 60);
+
+      if (hour < minHour) minHour = hour;
+      if (endHour > maxHour) maxHour = endHour;
+    });
 
     // Adicionar margem de 2 horas antes e depois
     minHour = Math.max(0, minHour - 2);
@@ -455,7 +480,9 @@ allSessions.forEach((session) => {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-slate-400">Carregando calendário...</p>
+          <p className="text-gray-600 dark:text-slate-400">
+            Carregando calendário...
+          </p>
         </div>
       </div>
     );
@@ -466,7 +493,9 @@ allSessions.forEach((session) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Calendário de Estudos</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">
+            Calendário de Estudos
+          </h1>
           <p className="text-sm text-gray-600 dark:text-slate-400 mt-1">
             Organize e visualize seus estudos agendados
           </p>
@@ -595,22 +624,30 @@ allSessions.forEach((session) => {
                 <div className="grid grid-cols-2 border-b border-gray-200 dark:border-slate-700">
                   <div
                     className={`p-3 border-r border-gray-200 dark:border-slate-700 text-center ${
-                      isToday(getDay()) ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-gray-50 dark:bg-slate-700/50"
+                      isToday(getDay())
+                        ? "bg-emerald-50 dark:bg-emerald-900/20"
+                        : "bg-gray-50 dark:bg-slate-700/50"
                     }`}
                   >
                     <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">
-                      {getDay().toLocaleDateString("pt-BR", { weekday: "long" })}
+                      {getDay().toLocaleDateString("pt-BR", {
+                        weekday: "long",
+                      })}
                     </p>
                     <p
                       className={`text-lg font-bold mt-1 ${
-                        isToday(getDay()) ? "text-emerald-600 dark:text-emerald-400" : "text-gray-900 dark:text-slate-100"
+                        isToday(getDay())
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-gray-900 dark:text-slate-100"
                       }`}
                     >
                       {getDay().getDate()}
                     </p>
                   </div>
                   <div className="p-3 bg-gray-50 dark:bg-slate-700/50">
-                    <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">Hora</p>
+                    <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">
+                      Hora
+                    </p>
                   </div>
                 </div>
 
@@ -619,7 +656,9 @@ allSessions.forEach((session) => {
                   {/* Day Column */}
                   <div
                     className={`border-r border-gray-200 dark:border-slate-700 relative ${
-                      isToday(getDay()) ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-slate-800"
+                      isToday(getDay())
+                        ? "bg-emerald-50 dark:bg-emerald-900/20"
+                        : "bg-white dark:bg-slate-800"
                     }`}
                   >
                     {hours.map((hour) => {
@@ -662,17 +701,26 @@ allSessions.forEach((session) => {
                                   : "bg-blue-100 dark:bg-blue-900/30 border-blue-500 dark:border-blue-700 text-blue-900 dark:text-blue-200"
                               }`}
                               style={{
-                                top: `${(new Date(session.scheduledAt).getMinutes() / 60) * 100}%`,
+                                top: `${
+                                  (new Date(session.scheduledAt).getMinutes() /
+                                    60) *
+                                  100
+                                }%`,
                                 height: `${(session.duration / 60) * 100}%`,
                               }}
                               onClick={() => handleEdit(session)}
                             >
-                              <p className="font-medium truncate">{session.topic.name}</p>
+                              <p className="font-medium truncate">
+                                {session.topic.name}
+                              </p>
                               <p className="text-xs opacity-75">
-                                {formatDateTime(session.scheduledAt)} • {formatTime(session.duration)}
+                                {formatDateTime(session.scheduledAt)} •{" "}
+                                {formatTime(session.duration)}
                               </p>
                               {session.notes && (
-                                <p className="text-xs opacity-60 mt-1 truncate">{session.notes}</p>
+                                <p className="text-xs opacity-60 mt-1 truncate">
+                                  {session.notes}
+                                </p>
                               )}
                             </div>
                           ))}
@@ -681,11 +729,17 @@ allSessions.forEach((session) => {
                               key={session.id}
                               className="absolute left-1 right-1 rounded-lg p-2 text-xs bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-400 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300"
                               style={{
-                                top: `${(new Date(session.completedAt).getMinutes() / 60) * 100}%`,
+                                top: `${
+                                  (new Date(session.completedAt).getMinutes() /
+                                    60) *
+                                  100
+                                }%`,
                                 height: `${(session.duration / 60) * 100}%`,
                               }}
                             >
-                              <p className="font-medium truncate">{session.topic.name}</p>
+                              <p className="font-medium truncate">
+                                {session.topic.name}
+                              </p>
                               <p className="text-xs opacity-75">
                                 {formatTime(session.duration)}
                               </p>
@@ -719,13 +773,17 @@ allSessions.forEach((session) => {
           {/* Week Header */}
           <div className="grid grid-cols-8 border-b border-gray-200 dark:border-slate-700">
             <div className="p-3 border-r border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700/50">
-              <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">Hora</p>
+              <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">
+                Hora
+              </p>
             </div>
             {weekDays.map((day) => (
               <div
                 key={day.toISOString()}
                 className={`p-3 text-center border-r border-gray-200 dark:border-slate-700 last:border-r-0 ${
-                  isToday(day) ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-gray-50 dark:bg-slate-700/50"
+                  isToday(day)
+                    ? "bg-emerald-50 dark:bg-emerald-900/20"
+                    : "bg-gray-50 dark:bg-slate-700/50"
                 }`}
               >
                 <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">
@@ -733,7 +791,9 @@ allSessions.forEach((session) => {
                 </p>
                 <p
                   className={`text-lg font-bold mt-1 ${
-                    isToday(day) ? "text-emerald-600 dark:text-emerald-400" : "text-gray-900 dark:text-slate-100"
+                    isToday(day)
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-gray-900 dark:text-slate-100"
                   }`}
                 >
                   {day.getDate()}
@@ -751,7 +811,9 @@ allSessions.forEach((session) => {
                   key={i}
                   className="h-16 border-b border-gray-100 dark:border-slate-700 flex items-start justify-end pr-2 pt-1 bg-white dark:bg-slate-800"
                 >
-                  <span className="text-xs text-gray-500 dark:text-slate-400">{i.toString().padStart(2, "0")}:00</span>
+                  <span className="text-xs text-gray-500 dark:text-slate-400">
+                    {i.toString().padStart(2, "0")}:00
+                  </span>
                 </div>
               ))}
             </div>
@@ -766,7 +828,9 @@ allSessions.forEach((session) => {
                 <div
                   key={day.toISOString()}
                   className={`border-r border-gray-200 dark:border-slate-700 last:border-r-0 relative ${
-                    isToday(day) ? "bg-emerald-50 dark:bg-emerald-900/20" : "bg-white dark:bg-slate-800"
+                    isToday(day)
+                      ? "bg-emerald-50 dark:bg-emerald-900/20"
+                      : "bg-white dark:bg-slate-800"
                   }`}
                 >
                   {Array.from({ length: 24 }, (_, hour) => {
@@ -809,14 +873,21 @@ allSessions.forEach((session) => {
                                 : "bg-blue-100 dark:bg-blue-900/30 border-blue-500 dark:border-blue-700 text-blue-900 dark:text-blue-200"
                             }`}
                             style={{
-                              top: `${(new Date(session.scheduledAt).getMinutes() / 60) * 100}%`,
+                              top: `${
+                                (new Date(session.scheduledAt).getMinutes() /
+                                  60) *
+                                100
+                              }%`,
                               height: `${(session.duration / 60) * 100}%`,
                             }}
                             onClick={() => handleEdit(session)}
                           >
-                            <p className="font-medium truncate">{session.topic.name}</p>
+                            <p className="font-medium truncate">
+                              {session.topic.name}
+                            </p>
                             <p className="text-xs opacity-75">
-                              {formatDateTime(session.scheduledAt)} • {formatTime(session.duration)}
+                              {formatDateTime(session.scheduledAt)} •{" "}
+                              {formatTime(session.duration)}
                             </p>
                           </div>
                         ))}
@@ -825,11 +896,17 @@ allSessions.forEach((session) => {
                             key={session.id}
                             className="absolute left-1 right-1 rounded-lg p-2 text-xs bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-400 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300"
                             style={{
-                              top: `${(new Date(session.completedAt).getMinutes() / 60) * 100}%`,
+                              top: `${
+                                (new Date(session.completedAt).getMinutes() /
+                                  60) *
+                                100
+                              }%`,
                               height: `${(session.duration / 60) * 100}%`,
                             }}
                           >
-                            <p className="font-medium truncate">{session.topic.name}</p>
+                            <p className="font-medium truncate">
+                              {session.topic.name}
+                            </p>
                             <p className="text-xs opacity-75">
                               {formatTime(session.duration)}
                             </p>
@@ -848,8 +925,13 @@ allSessions.forEach((session) => {
           {/* Month Grid */}
           <div className="grid grid-cols-7 border-b border-gray-200 dark:border-slate-700">
             {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day) => (
-              <div key={day} className="p-3 text-center bg-gray-50 dark:bg-slate-700/50 border-r border-gray-200 dark:border-slate-700 last:border-r-0">
-                <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">{day}</p>
+              <div
+                key={day}
+                className="p-3 text-center bg-gray-50 dark:bg-slate-700/50 border-r border-gray-200 dark:border-slate-700 last:border-r-0"
+              >
+                <p className="text-xs font-medium text-gray-600 dark:text-slate-400 uppercase">
+                  {day}
+                </p>
               </div>
             ))}
           </div>
@@ -865,7 +947,9 @@ allSessions.forEach((session) => {
                   key={idx}
                   className={`min-h-[120px] border-r border-b border-gray-200 dark:border-slate-700 p-2 ${
                     !isCurrentMonthDay ? "bg-gray-50 dark:bg-slate-700/50" : ""
-                  } ${isToday(day) ? "bg-emerald-50 dark:bg-emerald-900/20" : ""}`}
+                  } ${
+                    isToday(day) ? "bg-emerald-50 dark:bg-emerald-900/20" : ""
+                  }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span
@@ -896,7 +980,9 @@ allSessions.forEach((session) => {
                         }`}
                         onClick={() => handleEdit(session)}
                       >
-                        <p className="font-medium truncate">{session.topic.name}</p>
+                        <p className="font-medium truncate">
+                          {session.topic.name}
+                        </p>
                         <p className="text-xs opacity-75">
                           {formatDateTime(session.scheduledAt)}
                         </p>
@@ -907,13 +993,18 @@ allSessions.forEach((session) => {
                         key={session.id}
                         className="text-xs p-1.5 rounded bg-emerald-50 dark:bg-emerald-900/20 border-l-2 border-emerald-400 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300"
                       >
-                        <p className="font-medium truncate">{session.topic.name}</p>
-                        <p className="text-xs opacity-75">{formatTime(session.duration)}</p>
+                        <p className="font-medium truncate">
+                          {session.topic.name}
+                        </p>
+                        <p className="text-xs opacity-75">
+                          {formatTime(session.duration)}
+                        </p>
                       </div>
                     ))}
                     {(dayScheduled.length > 3 || dayCompleted.length > 2) && (
                       <p className="text-xs text-gray-500 dark:text-slate-400">
-                        +{dayScheduled.length - 3 + dayCompleted.length - 2} mais
+                        +{dayScheduled.length - 3 + dayCompleted.length - 2}{" "}
+                        mais
                       </p>
                     )}
                   </div>
@@ -927,7 +1018,9 @@ allSessions.forEach((session) => {
       {/* Scheduled Sessions List */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
         <div className="p-4 border-b border-gray-200 dark:border-slate-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-slate-100">Agendamentos</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-slate-100">
+            Agendamentos
+          </h2>
         </div>
         <div className="divide-y divide-gray-200 dark:divide-slate-700">
           {scheduledSessions.length === 0 ? (
@@ -979,7 +1072,9 @@ allSessions.forEach((session) => {
                       </div>
                     </div>
                     {session.notes && (
-                      <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">{session.notes}</p>
+                      <p className="text-sm text-gray-600 dark:text-slate-400 mt-2">
+                        {session.notes}
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 ml-4">
@@ -1047,7 +1142,10 @@ allSessions.forEach((session) => {
                 <select
                   value={scheduleForm.topicId}
                   onChange={(e) =>
-                    setScheduleForm({ ...scheduleForm, topicId: e.target.value })
+                    setScheduleForm({
+                      ...scheduleForm,
+                      topicId: e.target.value,
+                    })
                   }
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100"
@@ -1068,7 +1166,10 @@ allSessions.forEach((session) => {
                   type="datetime-local"
                   value={scheduleForm.scheduledAt}
                   onChange={(e) =>
-                    setScheduleForm({ ...scheduleForm, scheduledAt: e.target.value })
+                    setScheduleForm({
+                      ...scheduleForm,
+                      scheduledAt: e.target.value,
+                    })
                   }
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100"
@@ -1082,7 +1183,10 @@ allSessions.forEach((session) => {
                   type="number"
                   value={scheduleForm.duration}
                   onChange={(e) =>
-                    setScheduleForm({ ...scheduleForm, duration: e.target.value })
+                    setScheduleForm({
+                      ...scheduleForm,
+                      duration: e.target.value,
+                    })
                   }
                   required
                   min="1"
