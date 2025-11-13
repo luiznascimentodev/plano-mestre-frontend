@@ -15,10 +15,35 @@ export default function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Validação de senha conforme backend (mínimo 8 chars, 1 minúscula, 1 maiúscula, 1 número)
+  const validatePassword = (pwd: string): string | null => {
+    if (pwd.length < 8) {
+      return "A senha deve ter pelo menos 8 caracteres.";
+    }
+    if (!/(?=.*[a-z])/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra minúscula.";
+    }
+    if (!/(?=.*[A-Z])/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra maiúscula.";
+    }
+    if (!/(?=.*\d)/.test(pwd)) {
+      return "A senha deve conter pelo menos um número.";
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+
+    // Validar senha ANTES de enviar ao backend
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       await apiPublic.post("/auth/register", {
@@ -35,7 +60,14 @@ export default function RegisterForm() {
       if (err instanceof AxiosError && err.response?.status === 409) {
         setError("Este e-mail já está em uso.");
       } else if (err instanceof AxiosError && err.response?.status === 400) {
-        setError("Dados inválidos. Verifique os campos e tente novamente.");
+        const backendMessage = err.response?.data?.message;
+        if (Array.isArray(backendMessage)) {
+          setError(backendMessage.join(" "));
+        } else if (typeof backendMessage === "string") {
+          setError(backendMessage);
+        } else {
+          setError("Dados inválidos. Verifique os campos e tente novamente.");
+        }
       } else {
         setError("Ocorreu um erro. Tente novamente.");
       }
@@ -101,7 +133,7 @@ export default function RegisterForm() {
           placeholder="••••••••"
         />
         <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
-          A senha deve ter no mínimo 8 caracteres.
+          Mínimo 8 caracteres com pelo menos: 1 maiúscula, 1 minúscula e 1 número.
         </p>
       </div>
 
