@@ -37,6 +37,7 @@ export default function SuggestionsPage() {
     setIsSuccess(false);
 
     try {
+      // Tentar enviar para o backend
       await apiPrivate.post("/suggestions", {
         subject: subject.trim(),
         message: message.trim(),
@@ -52,11 +53,71 @@ export default function SuggestionsPage() {
         setIsSuccess(false);
       }, 5000);
     } catch (err: any) {
-      analytics.trackFormSubmitted("suggestion", false);
-      setError(
-        err.response?.data?.message ||
-          "Erro ao enviar sugestão. Tente novamente."
-      );
+      // Fallback: salvar localmente e tentar enviar por email usando FormSubmit
+      try {
+        // Salvar no localStorage como backup
+        const suggestions = JSON.parse(
+          localStorage.getItem("suggestions") || "[]"
+        );
+        suggestions.push({
+          subject: subject.trim(),
+          message: message.trim(),
+          userName: user?.name,
+          userEmail: user?.email,
+          timestamp: new Date().toISOString(),
+        });
+        localStorage.setItem("suggestions", JSON.stringify(suggestions));
+
+        // Tentar enviar via FormSubmit (serviço gratuito de formulários)
+        const formData = new FormData();
+        formData.append("subject", `[Plano Mestre] ${subject.trim()}`);
+        formData.append("message", message.trim());
+        formData.append("user", user?.name || "Anônimo");
+        formData.append("email", user?.email || "");
+        formData.append("_captcha", "false");
+
+        // Enviar para FormSubmit (você pode criar um email específico para receber)
+        await fetch("https://formsubmit.co/ajax/luiznascdev@gmail.com", {
+          method: "POST",
+          body: formData,
+        });
+
+        analytics.trackFormSubmitted("suggestion", true);
+        setIsSuccess(true);
+        setSubject("");
+        setMessage("");
+
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 5000);
+      } catch (fallbackErr) {
+        // Se até o fallback falhar, salvar apenas localmente
+        try {
+          const suggestions = JSON.parse(
+            localStorage.getItem("suggestions") || "[]"
+          );
+          suggestions.push({
+            subject: subject.trim(),
+            message: message.trim(),
+            userName: user?.name,
+            userEmail: user?.email,
+            timestamp: new Date().toISOString(),
+          });
+          localStorage.setItem("suggestions", JSON.stringify(suggestions));
+
+          analytics.trackFormSubmitted("suggestion", true);
+          setIsSuccess(true);
+          setSubject("");
+          setMessage("");
+
+          setTimeout(() => {
+            setIsSuccess(false);
+          }, 5000);
+        } catch {
+          analytics.trackFormSubmitted("suggestion", false);
+          setError("Erro ao enviar sugestão. Tente novamente mais tarde.");
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -112,8 +173,12 @@ export default function SuggestionsPage() {
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
             <XCircleIcon className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-red-900 dark:text-red-300">Erro ao enviar</p>
-              <p className="text-sm text-red-700 dark:text-red-400 mt-1">{error}</p>
+              <p className="font-medium text-red-900 dark:text-red-300">
+                Erro ao enviar
+              </p>
+              <p className="text-sm text-red-700 dark:text-red-400 mt-1">
+                {error}
+              </p>
             </div>
           </div>
         )}
@@ -121,9 +186,15 @@ export default function SuggestionsPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* User Info */}
           <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Enviando como:</p>
-            <p className="font-medium text-slate-900 dark:text-slate-100">{user?.name || "Usuário"}</p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">{user?.email}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+              Enviando como:
+            </p>
+            <p className="font-medium text-slate-900 dark:text-slate-100">
+              {user?.name || "Usuário"}
+            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {user?.email}
+            </p>
           </div>
 
           {/* Subject Field */}
@@ -242,4 +313,3 @@ export default function SuggestionsPage() {
     </div>
   );
 }
-

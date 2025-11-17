@@ -85,7 +85,7 @@ frontend/
 
 ```bash
 # Clone o repositório
-git clone https://github.com/SEU_USUARIO/plano-mestre-frontend.git
+git clone https://github.com/luiznascimentodev/plano-mestre-frontend.git
 cd plano-mestre-frontend
 
 # Instale as dependências
@@ -253,7 +253,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 👥 Autores
 
-- **Seu Nome** - [GitHub](https://github.com/SEU_USUARIO)
+- **Luiz Felippe Nascimento** - [GitHub](https://github.com/luiznascimentodev) | [LinkedIn](https://www.linkedin.com/in/luiz-felippe-nascimento/)
 
 ## 🙏 Agradecimentos
 
@@ -264,4 +264,3 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ---
 
 **Desenvolvido com ❤️ usando Next.js e TypeScript**
-
