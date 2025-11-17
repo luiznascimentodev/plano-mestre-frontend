@@ -56,7 +56,7 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
       path: "/dashboard/habits",
     },
     {
-      name: "Sugestões",
+      name: "Contato",
       icon: ChatBubbleLeftRightIcon,
       path: "/dashboard/suggestions",
     },
