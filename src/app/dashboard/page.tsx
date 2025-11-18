@@ -217,21 +217,23 @@ export default function DashboardPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 dark:border-emerald-400 mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">Carregando...</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
+            Carregando...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4 sm:space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
             Dashboard
           </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1.5">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 sm:mt-1.5">
             {new Date().toLocaleDateString("pt-BR", {
               weekday: "long",
               day: "2-digit",
@@ -240,86 +242,95 @@ export default function DashboardPage() {
             })}
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <button
             onClick={() => setShowScheduleModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all shadow-sm text-sm font-medium"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all shadow-sm text-xs sm:text-sm font-medium"
           >
             <CalendarIcon className="w-4 h-4" />
-            Agendar
+            <span className="hidden sm:inline">Agendar</span>
           </button>
           <button
             onClick={() => setShowCreateTopic(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-sm hover:shadow-md text-sm font-semibold"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-sm hover:shadow-md text-xs sm:text-sm font-semibold"
           >
             <PlusIcon className="w-4 h-4" />
-            Novo Assunto
+            <span className="hidden sm:inline">Novo Assunto</span>
+            <span className="sm:hidden">Novo</span>
           </button>
         </div>
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-md p-6 text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-md p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm opacity-90 mb-1.5">Estudado Hoje</p>
-              <p className="text-3xl font-bold tracking-tight">
+              <p className="text-xs sm:text-sm opacity-90 mb-1 sm:mb-1.5">
+                Estudado Hoje
+              </p>
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight">
                 {formatTime(todayMinutes)}
               </p>
-              <p className="text-xs opacity-75 mt-1.5">
+              <p className="text-[10px] sm:text-xs opacity-75 mt-1 sm:mt-1.5">
                 {todaySessions.length} sessões
               </p>
             </div>
-            <ClockIcon className="w-12 h-12 opacity-80" />
+            <ClockIcon className="w-10 h-10 sm:w-12 sm:h-12 opacity-80" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1.5">Total de Assuntos</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-1 sm:mb-1.5">
+                Total de Assuntos
+              </p>
+              <p className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 {topics.length}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
+              <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 sm:mt-1.5">
                 {topics.filter((t) => t.status === "IN_PROGRESS").length} em
                 progresso
               </p>
             </div>
-            <BookOpenIcon className="w-12 h-12 text-emerald-600 opacity-80" />
+            <BookOpenIcon className="w-10 h-10 sm:w-12 sm:h-12 text-emerald-600 opacity-80" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-1.5">Agendado Hoje</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-1 sm:mb-1.5">
+                Agendado Hoje
+              </p>
+              <p className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 {scheduledSessions.length}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">sessões</p>
+              <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 sm:mt-1.5">
+                sessões
+              </p>
             </div>
-            <CalendarIcon className="w-12 h-12 text-blue-600 opacity-80" />
+            <CalendarIcon className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 opacity-80" />
           </div>
         </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Topics Section */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-          <div className="p-6 border-b border-slate-200 dark:border-slate-700">
+          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Meus Assuntos
               </h2>
-              <span className="text-sm text-slate-500 dark:text-slate-400">
+              <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 {topics.length} total
               </span>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {topics.length === 0 ? (
               <div className="text-center py-8">
                 <BookOpenIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
@@ -369,20 +380,20 @@ export default function DashboardPage() {
 
         {/* Scheduled Sessions */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-          <div className="p-6 border-b border-slate-200 dark:border-slate-700">
+          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Agendado para Hoje
               </h2>
               <button
                 onClick={() => setShowScheduleModal(true)}
-                className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition-colors"
+                className="text-xs sm:text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium transition-colors"
               >
                 + Agendar
               </button>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {scheduledSessions.length === 0 ? (
               <div className="text-center py-8">
                 <CalendarIcon className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
@@ -445,12 +456,12 @@ export default function DashboardPage() {
 
       {/* Recent Sessions */}
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
             Sessões Recentes
           </h2>
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {recentSessions.length === 0 ? (
             <div className="text-center py-8">
               <ClockIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
@@ -488,10 +499,12 @@ export default function DashboardPage() {
 
       {/* Create Topic Modal */}
       {showCreateTopic && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transition-colors">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Novo Assunto</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transition-colors">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
+                Novo Assunto
+              </h2>
               <button
                 onClick={() => setShowCreateTopic(false)}
                 className="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
@@ -509,10 +522,10 @@ export default function DashboardPage() {
 
       {/* Schedule Modal */}
       {showScheduleModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl transition-colors">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4 animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 w-full max-w-md shadow-2xl transition-colors">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
                 Agendar Sessão
               </h2>
               <button
@@ -522,9 +535,12 @@ export default function DashboardPage() {
                 <XMarkIcon className="w-5 h-5" />
               </button>
             </div>
-            <form onSubmit={handleScheduleSession} className="space-y-4">
+            <form
+              onSubmit={handleScheduleSession}
+              className="space-y-3 sm:space-y-4"
+            >
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 sm:mb-1.5">
                   Assunto
                 </label>
                 <select
@@ -536,7 +552,7 @@ export default function DashboardPage() {
                     })
                   }
                   required
-                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-slate-900 dark:text-slate-100"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-sm text-slate-900 dark:text-slate-100"
                 >
                   <option value="">Selecione um assunto</option>
                   {topics.map((topic) => (
@@ -547,7 +563,7 @@ export default function DashboardPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 sm:mb-1.5">
                   Data e Hora
                 </label>
                 <input
@@ -560,11 +576,11 @@ export default function DashboardPage() {
                     })
                   }
                   required
-                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-slate-900 dark:text-slate-100"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-sm text-slate-900 dark:text-slate-100"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 sm:mb-1.5">
                   Duração (minutos)
                 </label>
                 <input
@@ -578,11 +594,11 @@ export default function DashboardPage() {
                   }
                   required
                   min="1"
-                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-slate-900 dark:text-slate-100"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-sm text-slate-900 dark:text-slate-100"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 sm:mb-1.5">
                   Notas (opcional)
                 </label>
                 <textarea
@@ -591,21 +607,21 @@ export default function DashboardPage() {
                     setScheduleForm({ ...scheduleForm, notes: e.target.value })
                   }
                   rows={3}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none"
+                  className="w-full px-3 py-2 sm:py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent transition-all text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none"
                   placeholder="Ex: Revisar capítulo 3"
                 />
               </div>
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-2 sm:gap-3 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-sm hover:shadow-md font-semibold"
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-sm hover:shadow-md font-semibold text-sm"
                 >
                   Agendar
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowScheduleModal(false)}
-                  className="px-4 py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-all font-medium"
+                  className="px-3 sm:px-4 py-2 sm:py-2.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-all font-medium text-sm"
                 >
                   Cancelar
                 </button>

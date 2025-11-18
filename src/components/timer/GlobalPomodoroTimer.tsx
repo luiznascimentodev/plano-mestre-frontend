@@ -65,29 +65,31 @@ export default function GlobalPomodoroTimer() {
 
   // 4. A UI (O Timer Visível)
   return (
-    <div className="fixed bottom-4 right-4 z-50 p-4 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 transition-colors">
-      <div className="flex items-center gap-4">
+    <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 transition-colors max-w-[calc(100vw-1.5rem)]">
+      <div className="flex items-center gap-2 sm:gap-4">
         {/* O Tempo */}
-        <div className="text-3xl font-semibold text-gray-900 dark:text-slate-100">
+        <div className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-slate-100 tabular-nums">
           {formatTime(timeLeft)}
         </div>
 
         {/* Botões de Ação */}
-        <div>
+        <div className="flex gap-1 sm:gap-2">
           {isRunning ? (
             <button
               onClick={pauseTimer}
-              className="px-3 py-1 text-sm text-white bg-yellow-500 dark:bg-yellow-600 hover:bg-yellow-600 dark:hover:bg-yellow-700 rounded transition-colors"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-white bg-yellow-500 dark:bg-yellow-600 hover:bg-yellow-600 dark:hover:bg-yellow-700 rounded transition-colors whitespace-nowrap"
             >
               Pausar
             </button>
           ) : (
             // (TODO: Adicionar botão 'Continuar' se timeLeft < duration)
-            <span className="text-sm text-gray-500 dark:text-slate-400">Pausado</span>
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 px-1">
+              Pausado
+            </span>
           )}
           <button
             onClick={resetTimer}
-            className="ml-2 px-3 py-1 text-sm text-gray-700 dark:text-slate-300 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 rounded transition-colors"
+            className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-gray-700 dark:text-slate-300 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 rounded transition-colors whitespace-nowrap"
           >
             Resetar
           </button>

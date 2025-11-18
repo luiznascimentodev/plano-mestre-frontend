@@ -12,6 +12,7 @@ import {
   ChevronDownIcon,
   PlusIcon,
   ChatBubbleLeftRightIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useAuthStore } from "@/store/auth.store";
 import CreateTopicForm from "@/components/topics/CreateTopicForm";
@@ -31,9 +32,11 @@ interface Topic {
 interface SidebarProps {
   topics: Topic[];
   onTopicCreated: () => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
-export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
+export default function Sidebar({ topics, onTopicCreated, isMobileOpen = false, onMobileClose }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuthStore();
@@ -72,6 +75,11 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
     router.push("/login");
   };
 
+  const handleNavClick = (path: string) => {
+    router.push(path);
+    onMobileClose?.();
+  };
+
   const getStatusColor = (status: Topic["status"]) => {
     switch (status) {
       case "NOT_STARTED":
@@ -88,18 +96,39 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-sm z-30 transition-colors">
-      {/* Logo */}
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-sm">
-            <span className="text-white font-bold text-lg">✓</span>
+    <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onMobileClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed left-0 top-0 h-screen w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shadow-sm z-50 transition-all duration-300 ${
+        isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      }`}>
+        {/* Logo */}
+        <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-sm">
+                <span className="text-white font-bold text-base sm:text-lg">✓</span>
+              </div>
+              <h1 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Plano Mestre
+              </h1>
+            </div>
+            {/* Mobile Close Button */}
+            <button
+              onClick={onMobileClose}
+              className="lg:hidden p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              <XMarkIcon className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+            </button>
           </div>
-          <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-            Plano Mestre
-          </h1>
         </div>
-      </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-4">
@@ -110,9 +139,7 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
             return (
               <li key={item.name}>
                 <button
-                  onClick={() => {
-                    router.push(item.path);
-                  }}
+                  onClick={() => handleNavClick(item.path)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm font-medium relative group ${
                     isActive
                       ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
@@ -176,9 +203,10 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
                 topics.map((topic) => (
                   <li key={topic.id}>
                     <button
-                      onClick={() =>
-                        router.push(`/dashboard/topics/${topic.id}`)
-                      }
+                      onClick={() => {
+                        router.push(`/dashboard/topics/${topic.id}`);
+                        onMobileClose?.();
+                      }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left group"
                     >
                       <div
@@ -266,7 +294,7 @@ export default function Sidebar({ topics, onTopicCreated }: SidebarProps) {
             </a>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

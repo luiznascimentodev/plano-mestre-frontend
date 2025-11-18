@@ -28,6 +28,7 @@ export default function DashboardLayout({
   const [topics, setTopics] = useState<Topic[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const hasCheckedRef = useRef(false);
   const hasRedirectedRef = useRef(false);
 
@@ -47,20 +48,20 @@ export default function DashboardLayout({
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     // Verificar autenticação apenas uma vez
     if (!hasCheckedRef.current) {
       hasCheckedRef.current = true;
-      
+
       // Verificar primeiro se já temos usuário no store (após login bem-sucedido)
       const { user: storedUser } = useAuthStore.getState();
-      
+
       if (storedUser) {
         // Se já temos usuário no store, permitir renderizar imediatamente
         // e fazer verificação em background
         setAuthChecked(true);
         fetchTopics();
-        
+
         // Verificar autenticação em background para sincronizar
         const verifyInBackground = async () => {
           try {
@@ -73,7 +74,11 @@ export default function DashboardLayout({
             // Se falhar com 401, tentar refresh token apenas se não for 404
             if (error.response?.status === 401) {
               try {
-                await apiPublic.post("/auth/refresh", {}, { withCredentials: true });
+                await apiPublic.post(
+                  "/auth/refresh",
+                  {},
+                  { withCredentials: true }
+                );
                 // Se refresh funcionar, tentar novamente
                 const retryResponse = await apiPrivate.get("/auth/me");
                 if (retryResponse.data && retryResponse.data.id) {
@@ -85,7 +90,10 @@ export default function DashboardLayout({
                 // Se não tiver, redirecionar para login
                 const { user } = useAuthStore.getState();
                 if (!user) {
-                  console.error("Erro ao verificar autenticação:", refreshError);
+                  console.error(
+                    "Erro ao verificar autenticação:",
+                    refreshError
+                  );
                   useAuthStore.getState().clear();
                   if (!hasRedirectedRef.current) {
                     hasRedirectedRef.current = true;
@@ -93,21 +101,27 @@ export default function DashboardLayout({
                   }
                 } else {
                   // Se ainda temos usuário no store, apenas logar o erro mas manter logado
-                  console.warn("Erro ao verificar autenticação em background, mas mantendo usuário logado:", refreshError?.response?.status || refreshError?.message);
+                  console.warn(
+                    "Erro ao verificar autenticação em background, mas mantendo usuário logado:",
+                    refreshError?.response?.status || refreshError?.message
+                  );
                 }
               }
             } else {
               // Outros erros (404, 500, etc.) - apenas logar, não deslogar
-              console.warn("Erro ao verificar autenticação em background:", error?.response?.status || error?.message);
+              console.warn(
+                "Erro ao verificar autenticação em background:",
+                error?.response?.status || error?.message
+              );
             }
           }
         };
-        
+
         // Executar verificação em background após um pequeno delay
         setTimeout(verifyInBackground, 100);
         return;
       }
-      
+
       // Se não temos usuário no store, fazer verificação completa
       // Timeout de segurança - sempre definir authChecked após 3 segundos
       const safetyTimeout = setTimeout(() => {
@@ -118,15 +132,15 @@ export default function DashboardLayout({
           router.replace("/login");
         }
       }, 3000);
-      
+
       // Função para verificar autenticação
       const checkAuth = async () => {
         try {
           // Tentar verificar via API (cookie httpOnly)
           const response = await apiPrivate.get("/auth/me");
-          
+
           clearTimeout(safetyTimeout);
-          
+
           if (response.data && response.data.id) {
             // Se tiver dados do usuário, atualizar store e buscar tópicos
             useAuthStore.getState().login("", response.data);
@@ -138,7 +152,11 @@ export default function DashboardLayout({
           // Se der erro 401, tentar refresh token antes de desistir
           if (error.response?.status === 401) {
             try {
-              await apiPublic.post("/auth/refresh", {}, { withCredentials: true });
+              await apiPublic.post(
+                "/auth/refresh",
+                {},
+                { withCredentials: true }
+              );
               // Se refresh funcionar, tentar novamente
               const retryResponse = await apiPrivate.get("/auth/me");
               if (retryResponse.data && retryResponse.data.id) {
@@ -153,7 +171,7 @@ export default function DashboardLayout({
               clearTimeout(safetyTimeout);
               setAuthChecked(true);
               useAuthStore.getState().clear();
-              
+
               if (!hasRedirectedRef.current) {
                 hasRedirectedRef.current = true;
                 router.replace("/login");
@@ -165,7 +183,7 @@ export default function DashboardLayout({
             clearTimeout(safetyTimeout);
             setAuthChecked(true);
             useAuthStore.getState().clear();
-            
+
             if (!hasRedirectedRef.current) {
               hasRedirectedRef.current = true;
               router.replace("/login");
@@ -174,10 +192,10 @@ export default function DashboardLayout({
           }
         }
       };
-      
+
       // Verificar autenticação após um pequeno delay
       const timeout = setTimeout(checkAuth, 100);
-      
+
       return () => {
         clearTimeout(timeout);
         clearTimeout(safetyTimeout);
@@ -191,7 +209,9 @@ export default function DashboardLayout({
       <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 dark:border-emerald-400 mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">Verificando autenticação...</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
+            Verificando autenticação...
+          </p>
         </div>
       </div>
     );
@@ -205,10 +225,19 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
-      <Sidebar topics={topics} onTopicCreated={fetchTopics} />
-      <div className="flex-1 flex flex-col ml-72 overflow-hidden">
-        <TopBar />
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-slate-50 dark:bg-slate-900 transition-colors">{children}</main>
+      <Sidebar
+        topics={topics}
+        onTopicCreated={fetchTopics}
+        isMobileOpen={isMobileMenuOpen}
+        onMobileClose={() => setIsMobileMenuOpen(false)}
+      />
+      <div className="flex-1 flex flex-col lg:ml-72 overflow-hidden">
+        <TopBar
+          onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-50 dark:bg-slate-900 transition-colors">
+          {children}
+        </main>
       </div>
     </div>
   );

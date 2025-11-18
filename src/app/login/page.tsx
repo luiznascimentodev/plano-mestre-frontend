@@ -33,24 +33,24 @@ export default function LoginPage() {
   }, [router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900 px-4 transition-colors">
+    <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900 px-4 sm:px-6 transition-colors">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl mb-4 shadow-sm">
-            <span className="text-white font-bold text-2xl">✓</span>
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl mb-3 sm:mb-4 shadow-sm">
+            <span className="text-white font-bold text-xl sm:text-2xl">✓</span>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Bem-vindo de volta</h1>
-          <p className="text-slate-600 dark:text-slate-400">Entre na sua conta para continuar estudando</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1.5 sm:mb-2">Bem-vindo de volta</h1>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">Entre na sua conta para continuar estudando</p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 transition-colors">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sm:p-8 transition-colors">
           <LoginForm />
 
           {/* Link para cadastro */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+          <div className="mt-5 sm:mt-6 text-center">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               Não tem uma conta?{" "}
               <Link
                 href="/cadastro"

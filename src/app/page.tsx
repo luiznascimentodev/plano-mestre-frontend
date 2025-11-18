@@ -104,26 +104,28 @@ export default function HomePage() {
 
       {/* Navigation - Ultra minimalista */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 transition-all">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">✓</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm sm:text-base">
+                  ✓
+                </span>
               </div>
-              <span className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <span className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100">
                 Plano Mestre
               </span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={handleLogin}
-                className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
               >
                 Entrar
               </button>
               <button
                 onClick={handleGetStarted}
-                className="px-5 py-2 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-medium rounded-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-sm hover:shadow-md"
+                className="px-3 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-xs sm:text-sm font-medium rounded-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-sm hover:shadow-md"
               >
                 Começar Grátis
               </button>
@@ -135,31 +137,31 @@ export default function HomePage() {
       {/* Hero Section - Ultra minimalista e impactante */}
       <section
         ref={heroRef as React.RefObject<HTMLElement>}
-        className="pt-40 pb-32 px-6 lg:px-8 relative z-10"
+        className="pt-24 sm:pt-32 md:pt-40 pb-16 sm:pb-24 md:pb-32 px-4 sm:px-6 lg:px-8 relative z-10"
       >
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-slate-900 dark:text-slate-100 mb-6 leading-[1.1] tracking-tight animate-fade-in-up">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-900 dark:text-slate-100 mb-4 sm:mb-6 leading-[1.1] tracking-tight animate-fade-in-up">
             Estude com{" "}
             <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
               inteligência
             </span>
           </h1>
           <p
-            className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto font-light animate-fade-in-up"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-slate-400 mb-8 sm:mb-12 max-w-2xl mx-auto font-light animate-fade-in-up px-4"
             style={{ animationDelay: "0.15s" }}
           >
             Pomodoro, flashcards, analytics e planejamento em uma plataforma
           </p>
           <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-in-up px-4"
             style={{ animationDelay: "0.3s" }}
           >
             <button
               onClick={handleGetStarted}
-              className="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
+              className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-base sm:text-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
             >
               Começar Grátis
-              <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
@@ -169,27 +171,27 @@ export default function HomePage() {
       <section
         id="features"
         ref={featuresRef.elementRef as React.RefObject<HTMLElement>}
-        className={`py-32 px-6 lg:px-8 relative z-10 transition-all duration-700 ${
+        className={`py-16 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-700 ${
           featuresRef.isVisible
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-8"
         }`}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {features.map((feature, idx) => {
               const Icon = feature.icon;
               return (
                 <div
                   key={idx}
-                  className="group relative p-8 rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300 hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl hover:scale-105 hover:-translate-y-1"
+                  className="group relative p-6 sm:p-8 rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300 hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl hover:scale-105 hover:-translate-y-1"
                   style={{
                     animationDelay: `${idx * 0.1}s`,
                     transitionDelay: `${idx * 0.05}s`,
                   }}
                 >
                   <div
-                    className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110 ${
+                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mb-4 sm:mb-5 transition-transform duration-300 group-hover:scale-110 ${
                       feature.color === "emerald"
                         ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"
                         : feature.color === "blue"
@@ -199,9 +201,9 @@ export default function HomePage() {
                         : "bg-gradient-to-br from-rose-400 to-rose-600 text-white"
                     }`}
                   >
-                    <Icon className="w-7 h-7" />
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">
                     {feature.title}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -215,9 +217,9 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section - Minimalista com métricas */}
-      <section className="py-24 px-6 lg:px-8 relative z-10 bg-slate-900 dark:bg-slate-950">
+      <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 relative z-10 bg-slate-900 dark:bg-slate-950">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
             {[
               { icon: ClockIcon, value: "Pomodoro", label: "Timer integrado" },
               {
@@ -239,11 +241,13 @@ export default function HomePage() {
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
-                  <Icon className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-400 mx-auto mb-2 sm:mb-3" />
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
+                  <div className="text-xs sm:text-sm text-slate-400">
+                    {stat.label}
+                  </div>
                 </div>
               );
             })}
@@ -254,58 +258,62 @@ export default function HomePage() {
       {/* CTA Final - Ultra minimalista */}
       <section
         ref={ctaRef.elementRef as React.RefObject<HTMLElement>}
-        className={`py-32 px-6 lg:px-8 relative z-10 transition-all duration-700 ${
+        className={`py-16 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8 relative z-10 transition-all duration-700 ${
           ctaRef.isVisible
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-8"
         }`}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-100 mb-8 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-100 mb-6 sm:mb-8 tracking-tight">
             Comece agora
           </h2>
-          <p className="text-xl text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto font-light">
+          <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-8 sm:mb-12 max-w-2xl mx-auto font-light px-4">
             Gratuito. Sem cartão de crédito. Cancele quando quiser.
           </p>
           <button
             onClick={handleGetStarted}
-            className="group px-10 py-5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-2xl hover:shadow-emerald-500/50 hover:scale-105 inline-flex items-center gap-3"
+            className="group px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl font-semibold text-base sm:text-lg hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-2xl hover:shadow-emerald-500/50 hover:scale-105 inline-flex items-center gap-2 sm:gap-3"
           >
             Criar Conta Grátis
-            <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </section>
 
       {/* Footer - Ultra minimalista */}
-      <footer className="bg-slate-900 dark:bg-slate-950 border-t border-slate-800/50 py-8 px-6 relative z-10">
+      <footer className="bg-slate-900 dark:bg-slate-950 border-t border-slate-800/50 py-6 sm:py-8 px-4 sm:px-6 relative z-10">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-7 h-7 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">✓</span>
+          <div className="flex items-center justify-center gap-2 mb-2 sm:mb-3">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xs sm:text-sm">✓</span>
             </div>
-            <span className="text-slate-400 font-medium text-sm">
+            <span className="text-slate-400 font-medium text-xs sm:text-sm">
               Plano Mestre
             </span>
           </div>
-          <p className="text-xs text-slate-500 mb-3">
+          <p className="text-[10px] sm:text-xs text-slate-500 mb-2 sm:mb-3">
             © {new Date().getFullYear()} Todos os direitos reservados
           </p>
-          <div className="flex items-center justify-center gap-4 text-xs text-slate-600 dark:text-slate-500">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs text-slate-600 dark:text-slate-500">
             <a
               href="https://github.com/luiznascimentodev"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-slate-400 transition-colors flex items-center gap-1"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-3 h-3 sm:w-4 sm:h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   fillRule="evenodd"
                   d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
                   clipRule="evenodd"
                 />
               </svg>
-              GitHub
+              <span className="hidden sm:inline">GitHub</span>
             </a>
             <span className="text-slate-700">•</span>
             <a
@@ -314,10 +322,14 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="hover:text-slate-400 transition-colors flex items-center gap-1"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-3 h-3 sm:w-4 sm:h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
               </svg>
-              LinkedIn
+              <span className="hidden sm:inline">LinkedIn</span>
             </a>
           </div>
         </div>
