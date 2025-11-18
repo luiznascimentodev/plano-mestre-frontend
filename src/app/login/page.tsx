@@ -14,7 +14,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     analytics.trackPageView("/login", "Login");
-    
+
     // Verificar autenticação apenas uma vez após o mount
     if (!hasCheckedRef.current && !hasRedirectedRef.current) {
       hasCheckedRef.current = true;
@@ -27,7 +27,7 @@ export default function LoginPage() {
           router.replace("/dashboard");
         }
       }, 100);
-      
+
       return () => clearTimeout(checkAuth);
     }
   }, [router]);
@@ -40,8 +40,12 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl mb-3 sm:mb-4 shadow-sm">
             <span className="text-white font-bold text-xl sm:text-2xl">✓</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1.5 sm:mb-2">Bem-vindo de volta</h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">Entre na sua conta para continuar estudando</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1.5 sm:mb-2">
+            Bem-vindo de volta
+          </h1>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Entre na sua conta para continuar estudando
+          </p>
         </div>
 
         {/* Form Card */}
@@ -65,4 +69,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

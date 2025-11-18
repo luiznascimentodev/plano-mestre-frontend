@@ -18,8 +18,12 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl mb-3 sm:mb-4 shadow-sm">
             <span className="text-white font-bold text-xl sm:text-2xl">✓</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1.5 sm:mb-2">Crie sua conta</h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">Comece a organizar seus estudos hoje mesmo</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1.5 sm:mb-2">
+            Crie sua conta
+          </h1>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Comece a organizar seus estudos hoje mesmo
+          </p>
         </div>
 
         {/* Form Card */}
